@@ -267,4 +267,161 @@ public class ArraysAndStringsTest {
         assertFalse(ArraysAndStrings.maxOneEdit(a, b));
     }
     
+    /*
+     * input: unequal lengths
+     * output: true
+     */
+    @Test
+    public void testMaxOneEditInsertion() {
+        String a = "pail";
+        String b = "pails";
+        assertTrue(ArraysAndStrings.maxOneEdit(a, b));
+    }
+    
+    /*
+     * input: unequal lengths
+     * output: true
+     */
+    @Test
+    public void testMaxOneEditDeletion() {
+        String a = "pail";
+        String b = "ail";
+        assertTrue(ArraysAndStrings.maxOneEdit(a, b));
+    }
+    
+    /*
+     * input: unequal lengths
+     * output: true
+     */
+    @Test
+    public void testMaxOneEditReplace() {
+        String a = "pail";
+        String b = "tail";
+        assertTrue(ArraysAndStrings.maxOneEdit(a, b));
+    }
+    
+    /*
+     * input: unequal lengths
+     * output: false
+     */
+    @Test
+    public void testMaxOneEditUnequalLengthsFalse() {
+        String a = "pail";
+        String b = "ails";
+        assertFalse(ArraysAndStrings.maxOneEdit(a, b));
+    }
+    
+    // compress()
+    // input: empty, nonempty
+    // out==in: true, false
+    
+    /*
+     * input: empty
+     * out==in: true
+     */
+    @Test
+    public void testCompressEmptyString() {
+        String s = "";
+        assertEquals("", ArraysAndStrings.compress(s));
+    }
+    
+    /*
+     * input: nonempty
+     * out==in: false
+     */
+    @Test
+    public void testCompressSimple() {
+        String s = "aaabbb";
+        assertEquals("a3b3", ArraysAndStrings.compress(s));
+    }
+    
+    /*
+     * input: nonempty
+     * out==in: true
+     */
+    @Test
+    public void testCompressOutputInput() {
+        String s = "abb";
+        assertEquals(s, ArraysAndStrings.compress(s));
+    }
+    
+    /*
+     * input: nonempty
+     * out==in: false
+     */
+    @Test
+    public void testCompressComplexEndMultiple() {
+        String s = "aaaccdddeebb";
+        assertEquals("a3c2d3e2b2", ArraysAndStrings.compress(s));
+    }
+    
+    /*
+     * input: nonempty
+     * out==in: false
+     */
+    @Test
+    public void testCompressComplexEndSingle() {
+        String s = "accddddddeeb";
+        assertEquals("a1c2d6e2b1", ArraysAndStrings.compress(s));
+    }
+    
+    // zeroMatrix()
+    // N: 0, >0
+    // numZeros: 0, 1, >1
+    
+    /*
+     * N: 0
+     * numZeros: 0
+     */
+    @Test
+    public void testZeroMatrixEmpty() {
+        int[][] in = new int[0][0];
+        assertArrayEquals(new int[0][0], ArraysAndStrings.zeroMatrix(in));
+    }
+    
+    /*
+     * N: >0
+     * numZeros: 0
+     */
+    @Test
+    public void testZeroMatrixNoZeros() {
+        int[][] in = {{1, 2}, {3, 4}};
+        assertArrayEquals(new int[][] {{1, 2}, {3, 4}},
+                ArraysAndStrings.zeroMatrix(in));
+        
+    }
+    
+    /*
+     * N: >0
+     * numZeros: 1
+     */
+    @Test 
+    public void testZeroMatrixOneZero() {
+        int[][] in = {{0, 2}, {3, 4}};
+        assertArrayEquals(new int[][] {{0, 0}, {0, 4}},
+                ArraysAndStrings.zeroMatrix(in));
+    }
+    
+    /*
+     * N: >0
+     * numZeros: >1
+     */
+    @Test 
+    public void testZeroMatrixCornerZeros() {
+        int[][] in = {{0, 2}, {3, 0}};
+        assertArrayEquals(new int[][] {{0, 0}, {0, 0}},
+                ArraysAndStrings.zeroMatrix(in));
+    }
+    
+    /*
+     * N: >0
+     * numZeros: >1
+     */
+    @Test 
+    public void testZeroMatrixMultipleZeros() {
+        int[][] in = {{0, 2, 2}, {3, 0, 1}, {6, 4, 5}};
+        assertArrayEquals(new int[][] {{0, 0, 0}, {0, 0, 0}, {0, 0, 5}},
+                ArraysAndStrings.zeroMatrix(in));
+    }
+    
 }

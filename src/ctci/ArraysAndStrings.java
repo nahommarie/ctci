@@ -8,9 +8,8 @@ public class ArraysAndStrings {
     
     public static void main(String[] args) {
         // sandbox
-        
-        int mask = 1 << 3;
-        System.out.println(8 & 16);
+        byte x = 3;
+        System.out.println(x);
     }
     
     /**
@@ -114,6 +113,14 @@ public class ArraysAndStrings {
         
     }
     
+    /**
+     * Find if a string is a permutation of a palindrome. A palindrome
+     * is any word that is the same frontwards and backwards (not 
+     * case sensitive). 
+     * 
+     * @param input The input string
+     * @return true/false if input is a permutation of a palindrome
+     */
     public static boolean isPermutationPalindrome(String input) {
         // TODO runtime, requirements
         // check # of odd frequencies of any letter doesn't exceed 1
@@ -137,8 +144,16 @@ public class ArraysAndStrings {
            return true;
     }
     
+    /**
+     * Find whether two strings are one edit apart. Possible edits:
+     * Replace: 'pail' -> 'bail'
+     * Delete: 'pail' -> 'pal'
+     * Insert: 'pail' -> 'pails'
+     * @param a first string
+     * @param b second string
+     * @return whether <= one edit will turn a-> b or b->a 
+     */
     public static boolean maxOneEdit(String a, String b) {
-        // TODO add case for checking different length inputs
         // use int[] to count char freq's and lastly check <= 1 differences
         int lengthDifference = a.length() - b.length();
         if (lengthDifference > 1 || lengthDifference < -1) return false;
@@ -151,8 +166,103 @@ public class ArraysAndStrings {
                     hasDifference = true;
                 }
             }
+            return true;
+        } else {
+            String shorter = a.length() < b.length() ? a : b;
+            String longer = a.length() > b.length() ? a : b;
+            int[] counts = new int[128]; // assumes ASCII
+            int[] cnts = new int[128];
+            // build frequency table for shorter string
+            for (int i=0; i<shorter.length(); i++) {
+                int key = shorter.charAt(i);
+                counts[key]++;
+            }
+            // // build freq table for longer
+            for (int i=0; i<longer.length(); i++) {
+                int key = longer.charAt(i);
+                cnts[key]++;
+            }
+            // compare # discrepancies between freq. tables
+            // could have simply implemented a check against the strings themselves
+            // would have taken less time with less overhead 
+            boolean hasDiff = false;
+            for (int i=0; i<128; i++) {
+                if (counts[i] != cnts[i]) {
+                    if (hasDiff) return false;
+                    hasDiff = true;
+                }
+            }
+            return true;
         }
-        return true;
+    }
+    
+    /**
+     * Compress the string s by adding letter frequencies. Returns the 
+     * original string if the output would be longer than the input
+     * @param s Input string
+     * @return shorter of compressed input and original input strings
+     */
+    public static String compress(String s) {
+        if (s.length() == 0) return "";
+        int count = 0;
+        StringBuilder out = new StringBuilder();
+        String last = s.substring(0, 1);
+        for (int i=0; i<s.length(); i++) {
+            String curr = s.substring(i, i+1);
+            if (curr.equals(last)) {
+                count++;
+            } else {
+                out.append(last);
+                out.append(count);
+                count = 1;
+                last = curr;
+            }
+        } 
+        out.append(last);
+        out.append(count);
+        if (s.length() < out.length()) {
+            return s;
+        } else {
+            return out.toString();
+        }
+    }
+    
+    public static void rotate(byte[][] matrix) {
+     // TODO
+        // what exactly are they asking here..?
+    }
+    
+    public static int[][] zeroMatrix(int[][] matrix) {
+        // TODO
+        int n = matrix.length;
+        if (n == 0) return new int[0][0];
+        int[][] out = new int[n][n];
+        HashSet<Integer> rows = new HashSet<>();
+        HashSet<Integer> cols = new HashSet<>();
+        for (int r=0; r<matrix.length; r++) {
+            int[] currRow = matrix[r];
+            for (int c=0; c<currRow.length; c++) {
+                if (currRow[c] == 0) {
+                    rows.add(r);
+                    cols.add(c);
+                }
+            }
+        }
+        
+        for (int r=0; r<matrix.length; r++) {
+            int[] currRow = new int[n];
+            for (int c=0; c<currRow.length; c++) {
+                if (rows.contains(r) || cols.contains(c)) {
+                    currRow[c] = 0;
+                } else {
+                    currRow[c] = matrix[r][c];
+                }
+            }
+            out[r] = currRow;
+        }
+        
+        return out;
+        
     }
 
 }
